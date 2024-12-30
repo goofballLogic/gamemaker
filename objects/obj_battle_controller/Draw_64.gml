@@ -12,6 +12,7 @@ if(room == rm_combat) {
 	
 	draw_set_alpha(1)
 	draw_set_color(c_white)
-	draw_text(unit_height, unit_height, string("Hostile detected!   SIZE-( {0} )   STRENGTH-( {1} )", enemy_size, enemy_strength))
+	draw_text(unit_height, unit_height, string("Hostile detected ___ SIZE-( {0} ) ___", enemy_size))
+	draw_text(unit_height, unit_height * 2, string("Win the battle to increase your weapons or propulsion"))
 
 }

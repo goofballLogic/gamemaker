@@ -41,7 +41,6 @@
     {"id":{"name":"obj_but_to_flee","path":"objects/obj_but_to_flee/obj_but_to_flee.yy",},},
     {"id":{"name":"obj_but_to_go","path":"objects/obj_but_to_go/obj_but_to_go.yy",},},
     {"id":{"name":"obj_but_to_hunt","path":"objects/obj_but_to_hunt/obj_but_to_hunt.yy",},},
-    {"id":{"name":"obj_pip","path":"objects/obj_pip/obj_pip.yy",},},
     {"id":{"name":"obj_player","path":"objects/obj_player/obj_player.yy",},},
     {"id":{"name":"obj_rm_main","path":"objects/obj_rm_main/obj_rm_main.yy",},},
     {"id":{"name":"rm_combat","path":"rooms/rm_combat/rm_combat.yy",},},
