@@ -1,0 +1,1 @@
+obj_battle_controller.flee_battle();
