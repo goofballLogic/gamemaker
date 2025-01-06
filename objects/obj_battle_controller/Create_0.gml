@@ -7,7 +7,7 @@ player_health_original = 10
 player_health = player_health_original
 
 player_shields_original = 10
-player_shields = player_shields_original - 4
+player_shields = player_shields_original
 
 enemy_strength = floor(enemy_size * 10)
 
@@ -15,13 +15,78 @@ enemy_shields_original = 10
 enemy_shields = enemy_shields_original
 
 enemy_health_original = 10
-enemy_health = enemy_health_original - 3
+enemy_health = enemy_health_original
 
 function fight_battle() {
 	
-	show_message("You fight the battle");
+	var player_random = random(2) * player_strength;
+	var enemy_random = random(2) * enemy_strength;
+	if(player_random > enemy_random) {
+	
+		hit_enemy();
+		
+	} else {
+		
+		hit_player();
+		
+	}
+	if(enemy_health < 1) {
+		
+		show_message("Enemy is defeated");
+		calculate_winnings();
+	
+	} else if(player_health < 1) {
+		
+		show_message("You are defeated");
+		calculate_losses();
+		
+	}
 	
 }
+
+function calculate_winnings() {
+	
+	show_message("Not implemented: calculate winnings");
+	room_goto(rm_go);
+	
+}
+
+function calculate_losses() {
+	
+	show_message("Not implemented: calculate losses");
+	room_goto(rm_go);
+	
+}
+
+function hit_enemy() {
+
+	if(enemy_shields > 0) {
+		
+		enemy_shields--;
+		
+	} else if(enemy_health > 0) {
+		
+		enemy_health--;
+		
+	}
+	
+}
+
+
+function hit_player() {
+
+	if(player_shields > 0) {
+		
+		player_shields--;
+		
+	} else if(player_health > 0) {
+		
+		player_health--;
+		
+	}
+	
+}
+
 
 function flee_battle() {
 	
@@ -53,7 +118,7 @@ function draw_pips(x_start, y_start, color, limit, value, columns, x_delta, y_de
 	for(var i = 0; i < limit; i++) {
 
 		draw_pip({ x: px, y: py, inset: 0, alpha: 0.6, color: c_pip });
-		if(i <= value)
+		if(i < value)
 			draw_pip({ x: px, y: py, inset: 5, color, alpha: 1 });
 		c++;
 		if(c == columns) {
