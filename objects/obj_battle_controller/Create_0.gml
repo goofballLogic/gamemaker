@@ -6,12 +6,12 @@ player_strength = obj_player.weapons * 10
 player_health_original = 10
 player_health = player_health_original
 
-player_shields_original = 10
+player_shields_original = obj_player.shields
 player_shields = player_shields_original
 
-enemy_strength = floor(enemy_size * 10)
+enemy_strength = floor(enemy_size * 10) // e.g. 1.44 * 10 = 14
 
-enemy_shields_original = 10
+enemy_shields_original = floor(10 * enemy_size * max(0.1, random(1))) // e.g. 10 * 1.44 * 0.45 = 6
 enemy_shields = enemy_shields_original
 
 enemy_health_original = 10
@@ -32,26 +32,50 @@ function fight_battle() {
 	}
 	if(enemy_health < 1) {
 		
-		show_message("Enemy is defeated");
-		calculate_winnings();
+		player_won();
 	
 	} else if(player_health < 1) {
 		
-		show_message("You are defeated");
-		calculate_losses();
+		player_lost();
 		
 	}
 	
 }
 
-function calculate_winnings() {
+function player_won() {
 	
-	show_message("Not implemented: calculate winnings");
+	/*
+		if you win the battle, 
+		some of the enemy's engines, shields and weapons are destroyed
+		others are added to your ship
+	*/
+	destruction_quotient = random(1) * random(1) * random(1);
+	won_shields = floor(enemy_shields_original * destruction_quotient);
+	won_engines = floor(enemy_size * 10 * destruction_quotient * random(1));
+	won_weapons = floor(enemy_size * 10 * destruction_quotient);
+	
+	transcript = "You defeated the enemy!\n";
+	recovered = "";
+	if (won_shields > 0) recovered += string(" - Shields: {0}\n", won_shields)
+	if (won_engines > 0) recovered += string(" - Engines: {0}\n", won_engines)
+	if (won_weapons > 0) recovered += string(" - Weapons: {0}\n", won_weapons)
+	if (recovered == "")
+		recovered = "Everything was destroyed - you recovered nothing.";
+	else
+		recovered = "You recovered some of the enemy's equipment:\n" + recovered
+	transcript += recovered;
+
+	show_message(transcript);
+
+	obj_player.shields_recovered(won_shields);
+	obj_player.engines_recovered(won_engines);
+	obj_player.weapons_recovered(won_weapons);
+
 	room_goto(rm_go);
 	
 }
 
-function calculate_losses() {
+function player_lost() {
 	
 	show_message("Not implemented: calculate losses");
 	room_goto(rm_go);
@@ -141,7 +165,8 @@ function draw_pips(x_start, y_start, color, limit, value, columns, x_delta, y_de
 function draw_player_panel(def) {
 
 	var delta = gap_size + unit_size;
-	var cols = 5;
+	var health_cols = 2; // i.e. 5 rows
+	var shields_cols = min(10, ceil(def.shields_original / 5));
 	
 	var text = string("{0} strength: {1}", def.name, def.strength);
 	
@@ -158,7 +183,7 @@ function draw_player_panel(def) {
 	draw_pips(
 		pipx, pipy,
 		def.color, def.health_original, def.health,
-		cols, xdelta, delta
+		health_cols, xdelta, delta
 	);
 	var shield_color = make_color_hsv(
 		color_get_hue(def.color),
@@ -166,9 +191,9 @@ function draw_player_panel(def) {
 		color_get_value(def.color) * 0.5
 	);
 	draw_pips(
-		pipx + (cols * xdelta), pipy,
+		pipx + (health_cols * xdelta), pipy,
 		shield_color, def.shields_original, def.shields,
-		cols, xdelta, delta
+		shields_cols, xdelta, delta
 	);
 	
 }
